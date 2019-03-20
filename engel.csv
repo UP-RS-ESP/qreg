@@ -1,7 +1,8 @@
 # Downloaded from:
 # Rdatasets
 # https://vincentarelbundock.github.io/Rdatasets/datasets.html
-"","income","foodexp"
+# bef := Beglian Franc
+"ID","income_bef","foodexp_bef"
 "1",420.157650843928,255.839424594576
 "2",541.411706721205,310.958667059145
 "3",901.157456651663,485.680014171085

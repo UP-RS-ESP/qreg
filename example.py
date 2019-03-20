@@ -1,62 +1,53 @@
+#! /usr/bin/env python3
 """
-Examples to help illustrate the module QREG.PY
-==============================================
+Example script to demonstrate the use of the QREG module
+--------------------------------------------------------
 
 """
-# Created: Fri Feb 22, 2019  11:56pm
-# Last modified: Fri Feb 22, 2019  11:56pm
+# Created: Wed Mar 20, 2019  10:25am
+# Last modified: Wed Mar 20, 2019  10:59am
 # Copyright: Bedartha Goswami <goswami@pik-potsdam.de>
 
 
+import sys
 import numpy as np
+
 import matplotlib.pyplot as pl
-import mkt
+from matplotlib.ticker import MaxNLocator
+
+import qreg
 
 
-def show_examples():
+def run_example():
     """
-    Returns the MK test results for artificial data.
+    Runs the example
     """
-    # create artificial time series with trend
-    n = 1000
-    C = [0.01, 0.001, -0.001, -0.01]
-    e = 1.00
-    t = np.linspace(0., 500, n)
+    print("load Engel's expenditure data set ...")
+    engel = np.genfromtxt("engel.csv", delimiter=",",
+                          names=True, skip_header=4)
+    # print(engel.dtype.names)
 
-    # set up figure
-    fig, axes = pl.subplots(nrows=2, ncols=2, figsize=[16.00, 9.00])
+    x, y = qreg.quantile_regression(engel["income_bef"], engel["foodexp_bef"])
 
-    # loop through various values of correlation
-    ALPHA = 0.01
-    for c, ax in zip(C, axes.flatten()):
-        # estimate the measurements 'x'
-        x = c * t +  e * np.random.randn(n)
-        x = np.round(x, 2)
+    # plot
+    fig = pl.figure(figsize=[12., 8.])
+    ax = fig.add_axes([0.15, 0.15, 0.70, 0.70])
+    ax.plot(engel["income_bef"], engel["foodexp_bef"], "o", alpha=0.5)
+    ax.plot(x, y, "x", alpha=0.5)
+    ax.set_xlabel("Income (BEF)", fontsize=axlabfs)
+    ax.set_ylabel("Food Expenditure (BEF)", fontsize=axlabfs)
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
+    ax.xaxis.set_minor_locator(MaxNLocator(nbins=51))
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=6))
+    ax.yaxis.set_minor_locator(MaxNLocator(nbins=51))
+    ax.tick_params(which="major", size=10)
+    ax.tick_params(which="minor", size=5)
+    ax.grid(which="both")
+    pl.show()
 
-        # get the slope, intercept and pvalues from the mklt module
-        MK, m, c, p = mkt.test(t, x, eps=1E-3, alpha=ALPHA, Ha="upordown")
-
-        # plot results
-        ax.plot(t, x, "k.-", label="Sampled time series")
-        ax.plot(t, m * t + c, "r-", label="Linear fit")
-        ax.set_title(MK.upper() + "\np=%.3f, alpha = %.2f" % (p, ALPHA),
-                     fontweight="bold", fontsize=10)
-
-        # prettify
-        if ax.is_last_row():
-            ax.legend(loc="upper right")
-            ax.set_xlabel("Time")
-        if ax.is_first_col():
-            ax.set_ylabel(r"Measurements $x$")
-        if ax.is_first_row():
-            ax.legend(loc="upper left")
-
-    # save/show plot
-    pl.show(fig)
     return None
 
-if __name__ == "__main__":
-    print("running example...")
-    show_examples()
-    print("done.")
 
+if __name__ == "__main__":
+    axlabfs, tiklabfs = 14., 12.
+    run_example()
