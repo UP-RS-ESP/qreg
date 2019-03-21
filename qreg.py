@@ -6,16 +6,16 @@ different quantiles for a give data set.
 
 """
 # Created: Fri Feb 22, 2019  11:52pm
-# Last modified: Wed Mar 20, 2019  01:36pm
+# Last modified: Thu Mar 21, 2019  12:19pm
 # Copyright: Bedartha Goswami <goswami@pik-potsdam.de>
 
 
 import numpy as np
-from scipy.special import ndtri, ndtr
 import sys
+from scipy.optimize import linprog
 
 
-def quantile_regression(x, y):
+def linear(x, y, tau=[]):
     """
     Estimates quantile regression coefficients for given data and quantiles.
 
@@ -35,7 +35,7 @@ def quantile_regression(x, y):
     Returns
     -------
     MK : string
-        result of the statistical test indicating whether or not to accept hte
+        result of the statistical test indicating whether or not to accept the
         alternative hypothesis 'Ha'
     m : scalar, float
         slope of the linear fit to the data
@@ -55,5 +55,28 @@ def quantile_regression(x, y):
 
     """
     print("quantile regression...")
+    assert (len(tau) > 0), "Please give a list of quantiles"
 
-    return x, y
+    ntau = len(tau)
+    N = y.shape[0]
+    X = np.c_[np.ones(N), x]
+    K = X.shape[1]
+    i_N = np.ones(N)
+    I_N = np.diagflat(i_N)
+    A = np.c_[X, -X, I_N, -I_N]
+    b = y
+    beta = np.zeros((ntau, 2))
+    for i in range(ntau):
+        # first attempt with linear programming
+        c = np.r_[np.zeros(2 * K), tau[i] * i_N, (1. - tau[i]) * i_N]
+        res = linprog(c=c,
+                      A_eq=A, b_eq=b,
+                      method="interior-point",
+                      bounds=(0, None),
+                      )
+        z = res.x
+        u = z[2 * K:2 * K + N]
+        v = z[2 * K + N:2 * K + 2 * N]
+        beta[i] = z[0:K] - z[K:(K + K)]
+
+    return beta
