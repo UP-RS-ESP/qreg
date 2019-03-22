@@ -5,7 +5,7 @@ Example script to demonstrate the use of the QREG module
 
 """
 # Created: Wed Mar 20, 2019  10:25am
-# Last modified: Thu Mar 21, 2019  12:19pm
+# Last modified: Fri Mar 22, 2019  04:00pm
 # Copyright: Bedartha Goswami <goswami@pik-potsdam.de>
 
 
@@ -57,7 +57,7 @@ def run_example():
     ax.tick_params(which="minor", size=5)
     ax.grid(which="both")
     ax.legend()
-    FN = "qreg_engel.png"
+    FN = "output.png"
     fig.savefig(FN)
     print("figure saved to: %s" % FN)
 
