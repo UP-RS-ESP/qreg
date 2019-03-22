@@ -26,7 +26,8 @@ able to detect (and import) the ``qreg`` package without any problem.
 
 # Documentation
 
-An overview of the functions and its usage can be found at:
+Detailed documentation to some soon. For now, the help text of the
+``qreg.linear`` function should suffice.
 
 
 # Examples
@@ -59,7 +60,7 @@ Bedartha Goswami <goswami@pik-potsdam.de>
 
 Created: Fri Feb 22, 2019  11:50pm
 
-Last modified: Fri Feb 22, 2019  11:50pm
+Last modified: Fri Mar 22, 2019  03:56pm
 
 
 
