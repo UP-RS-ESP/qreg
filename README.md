@@ -4,6 +4,11 @@ Python module to carry out quantile regression
 This module can be used to estimate linear regression coefficients for
 different quantiles for a give data set.
 
+# Requirements
+
+1. pyomo module for optimization using linear programming
+2. gplk
+
 
 # Installation
 
@@ -60,7 +65,7 @@ Bedartha Goswami <goswami@pik-potsdam.de>
 
 Created: Fri Feb 22, 2019  11:50pm
 
-Last modified: Fri Mar 22, 2019  03:56pm
+Last modified: Tue Mar 26, 2019  01:50pm
 
 
 
